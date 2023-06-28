@@ -48,12 +48,8 @@ d3.selectAll("#selDataset").on("change", getData);
         // Log the value of sample_one
         console.log(sample_one);
 
-        // Create the first plots
-        createBarChart(sample_one);
-        createBubbleChart(sample_one);
-    });
-    });
-// Create a function to create the bar chart
+    };
+// Declare a function to create the bar chart
  function createBarChart(sample) {
 
     // Retrieve all sample data
@@ -90,7 +86,7 @@ d3.selectAll("#selDataset").on("change", getData);
                 type: "bar",
             };
     
-            // Setup the layout
+            // Declare the layout
             let layout = {
                 title: "Top 10 OTUs in this Bellybutton"
             };
@@ -115,7 +111,7 @@ d3.selectAll("#selDataset").on("change", getData);
             // Grab the first index from the array
             let valueData = value[0];
     
-            // Get otu_ids, otu_lables, and sample_values from the json data
+            // Declare otu_ids, otu_lables, and sample_values from the json data
             let otu_ids = valueData.otu_ids;
             let otu_labels = valueData.otu_labels;
             let sample_values = valueData.sample_values;
@@ -132,13 +128,12 @@ d3.selectAll("#selDataset").on("change", getData);
                 marker: {
                     size: sample_values,
                     color: otu_ids,
-                    colorscale: "Earth"
                 }
             };
     
             // Set up the layout
             let layout = {
-                title: "Bacteria Per Sample",
+                title: "OTUs in This Bellybutton",
                 hovermode: "closest",
                 xaxis: {title: "OTU ID"},
             };
