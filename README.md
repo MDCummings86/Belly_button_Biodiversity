@@ -1,1 +1,5 @@
 # belly-button-challenge
+
+Well this one got the best of me for sure. I was not able to figure out where to even start as it seems like the drop down needs to be set up prior to the easier bar and bubble charts, but I can't seem to find any code that works to get the drop down to work. I'll have to get some tutoring on this as I'm not finding a comparable approach in the dropdown activity from day 3, the iteration activity in day 1 or the slicing activity. 
+
+Frustrating because it is very difficult to test if small portions of the code are even working since it depends on the visual output. The assignment instructions indicate to start by making the bar chart and then the bubble chart, but I"m not sure how that can happen without first having the dropdown connected to feed it the correct id for the OTU's. 
