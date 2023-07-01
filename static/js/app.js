@@ -1,147 +1,56 @@
+// connect the console log to the javascript file
+console.log("app.js")
+
 // Place url in a constant variable
 const url = "https://2u-data-curriculum-team.s3.amazonaws.com/dataviz-classroom/v1.1/14-Interactive-Web-Visualizations/02-Homework/samples.json"
 
-// Fetch the JSON data and console log it
-d3.json(url).then(function(data) {
-  console.log(data);
+// Fetch the JSON data and console log it (tutor session with David Chao)
+d3.json(url).then(function (data) {
+    console.log(data);
+
+    // assign a variable to access the data
+    let names = data.names
+
+    // assign a variable to access the HTML tag for the dropdown menu
+    dropdown = d3.select("#selDataset")
+
+    // for loop to iterate through the values and display the index of choice
+    for (let i = 0; i < names.length; i++) {
+        dropdown
+            .append("option")
+            .text(names[i])
+            .property("value", names[i]);
+    };
+
+    buildMetaData(names[0])
 });
 
-// Establish the initialize function
-function init() {
+// create a function to 
+function buildMetaData(id) {
+    d3.json(url).then(function (data) {
+        let meta = data.metadata
 
-    // // grab the container for the dropdown
-    // let dropdownMenu = d3.select("#selDataset");
+        let resultArray = meta.filter(sampleObj => sampleObj.id == id);
+        console.log("resultArray")
+        // console.log(resultArray)
 
-    // // grab samples for the dropdown menu
-    // d3.json(url).then((data) => {
+        // assign result variable to grab the first index of the resulting array
+        let result = resultArray[0];
+
+        // assign a box variable which grabs the metadata for the display
+        let box = d3.select("#sample-metadata");
+
+        // clears the metadata in the console log so it can be filled with the next pull
+        box.html("");
         
-    //     // Declare a object for the sample names
-    //     let names = data.names;
+        // loop for the display box and format to uppercase
+        Object.keys(result).forEach((key) => {
+            box.append("h6").text(key.toUpperCase() + ":" + result[key]);
+           
+          });
+    })
+};
 
-    //     // Add  samples to dropdown menu
-    //     names.forEach((id) => {
-    
-    // On change to the DOM, call getData()
-d3.selectAll("#selDataset").on("change", getData);
-
-    // Function called by DOM changes
-    function getData() {
-        let dropdownMenu = d3.select("#selDataset");
-    // Assign the value of the dropdown menu option to a letiable
-    let dataset = dropdownMenu.property("value");
-    // Initialize an empty array for the OTU data
-    let data = [];
-
-
-            // Iterate over the array using a for loop
-            for (let i = 0; i < names.length; i++) {
-                let name = names[i];
-                console.log(name);
-                dropdownMenu.append("option")
-                .text(name)
-                .property("value", id);
-            };
-
-        // Set the first sample from the list
-        let sample_one = names[0];
-
-        // Log the value of sample_one
-        console.log(sample_one);
-
-    };
-// Declare a function to create the bar chart
- function createBarChart(sample) {
-
-    // Retrieve all sample data
-    let sampleInfo = data.samples;
-    
-    // Filter based on the value of the sample
-    let value = sampleInfo.filter(result => result.id == sample);
-
-    // Grab the first index from the array
-    let valueData = value[0];
-     
-         // Use D3 to reassign the url as data
-         d3.json(url).then((data) => {
-    
-            // Declare the otu_ids, lables, and sample values
-            let otu_ids = valueData.otu_ids;
-            let otu_labels = valueData.otu_labels;
-            let sample_values = valueData.sample_values;
-    
-            // Log the data to the inspector console
-            console.log(otu_ids,otu_labels,sample_values);
-    
-            // Declare top ten items to display in descending order
-            let yaxis = otu_ids.slice(0,10).map(id => `OTU ${id}`).reverse();
-            let xaxis = sample_values.slice(0,10).reverse();
-            let labels = otu_labels.slice(0,10).reverse();
-            
-            // Set up the trace for the bar chart with horizontal orientation
-            let trace = {
-                x: xaxis,
-                y: yaxis,
-                labels: labels,
-                orientation: "h",
-                type: "bar",
-            };
-    
-            // Declare the layout
-            let layout = {
-                title: "Top 10 OTUs in this Bellybutton"
-            };
-    
-            // Call Plotly to plot the bar chart
-            Plotly.newPlot("bar", [trace], layout)
-        });
-    };
-    
-    // Function that builds the bubble chart
-    function createBubbleChart(sample) {
-    
-        // Use D3 to retrieve all of the data
-        d3.json(url).then((data) => {
-            
-            // Retrieve all sample data
-            let sampleInfo = data.samples;
-    
-            // Filter based on the value of the sample
-            let value = sampleInfo.filter(result => result.id == sample);
-    
-            // Grab the first index from the array
-            let valueData = value[0];
-    
-            // Declare otu_ids, otu_lables, and sample_values from the json data
-            let otu_ids = valueData.otu_ids;
-            let otu_labels = valueData.otu_labels;
-            let sample_values = valueData.sample_values;
-    
-            // Log the data in the inspector console
-            console.log(otu_ids,otu_labels,sample_values);
-            
-            // Set up the trace for bubble chart
-            let trace1 = {
-                x: otu_ids,
-                y: sample_values,
-                labels: otu_labels,
-                mode: "markers",
-                marker: {
-                    size: sample_values,
-                    color: otu_ids,
-                }
-            };
-    
-            // Set up the layout
-            let layout = {
-                title: "OTUs in This Bellybutton",
-                hovermode: "closest",
-                xaxis: {title: "OTU ID"},
-            };
-    
-            // Call Plotly to plot the bubble chart
-            Plotly.newPlot("bubble", [trace1], layout)
-        });
-    };
-    
-    // Call the initialize function
-    init()};
+function optionChanged(id){
+    buildMetaData(id)
+};
